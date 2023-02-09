@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.33214.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "View", "Viewer\View.csproj", "{8270BB94-11A2-4CCF-9733-23B963B0DF71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Viewer", "Viewer\Viewer.csproj", "{8270BB94-11A2-4CCF-9733-23B963B0DF71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
