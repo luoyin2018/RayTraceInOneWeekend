@@ -8,7 +8,7 @@ namespace Viewer
     {
         public static Image<Rgba32> GenerateImage()
         {
-            return Chapter3.GenerateImage();
+            return Chapter4.GenerateImage();
         }
     }
 }
