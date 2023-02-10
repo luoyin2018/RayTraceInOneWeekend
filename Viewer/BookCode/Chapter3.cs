@@ -1,14 +1,14 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using Viewer.BookCode;
 
-namespace Viewer
+namespace Viewer.BookCode
 {
-    public static class Core
+    public static class Chapter3
     {
         public static Image<Rgba32> GenerateImage()
         {
-            return Chapter1.GenerateImage();
+            return null;
         }
     }
 }
+

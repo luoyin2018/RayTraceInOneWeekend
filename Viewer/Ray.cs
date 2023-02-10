@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace Viewer
 {
-    class Ray
+    public struct Ray
     {
         public Vector3 Origin { get; }
         public Vector3 Direction { get; }
