@@ -1,10 +1,11 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System;
 using System.Numerics;
 
 namespace Viewer.BookCode
 {
-    public static class Chapter4
+    public static class Chapter5_1
     {
         public static Image<Rgba32> GenerateImage()
         {
@@ -41,7 +42,7 @@ namespace Viewer.BookCode
             return image;
         }
 
-        private static bool IsHitSphere(Vector3 center, float radius, ref Ray ray)
+        private static float HitSphere(Vector3 center, float radius, ref Ray ray)
         {
             Vector3 oc = ray.Origin - center;
 
@@ -51,18 +52,30 @@ namespace Viewer.BookCode
 
             float discriminant = b * b - 4 * a * c;
 
-            return discriminant > 0;
+            if(discriminant<0)
+            {
+                return -1.0f;
+            }
+            else
+            {
+                return (-b - (float)Math.Sqrt(discriminant)) / (2f * a);
+            }
         }
 
         private static Vector3 GetColor(ref Ray ray)
         {
-            if (IsHitSphere(new Vector3(0, 0, -1), 0.5f, ref ray))
+            Vector3 sphereCenter = new Vector3(0, 0, -1);
+            float radius = 0.5f;
+            float t = HitSphere(sphereCenter, radius, ref ray);
+            if (t > 0)
             {
-                return Vector3.UnitX;
-            } 
+                Vector3 hitPoint = ray.PointOnRay(t);
+                Vector3 normal = Vector3.Normalize(hitPoint - sphereCenter);
+                return 0.5f * (normal + Vector3.One);
+            }
             var dir = ray.Direction;
-            float t = 0.5f * (dir.Y + 1.0f);
-            return (1.0f - t) * Vector3.One + t * new Vector3(0.5f, 0.7f, 1.0f);
+            float ratio = 0.5f * (dir.Y + 1.0f);
+            return (1.0f - ratio) * Vector3.One + ratio * new Vector3(0.5f, 0.7f, 1.0f);
         }
     }
 }
