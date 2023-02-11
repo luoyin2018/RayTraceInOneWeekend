@@ -19,9 +19,6 @@ namespace Viewer.BookCode
             float height = 2;
             float dist = 1;    // 画面距相机的距离
 
-            float widthStep = width / (nx - 1);
-            float heightStep = height / (ny - 1);
-
             Vector3 bottom_left_corner = new Vector3(-width / 2, -height / 2, -dist);
 
             IHitable world = new HitableList(
@@ -33,11 +30,13 @@ namespace Viewer.BookCode
             // 从下往上一行一行扫描
             for (int y = ny - 1; y >= 0; y--)
             {
-                int dy = ny - 1 - y;
+                float v = (float)(ny - 1 - y) / (ny - 1);
 
                 for (int x = 0; x < nx; x++)
                 {
-                    Vector3 curPt = bottom_left_corner + new Vector3(x * widthStep, dy * heightStep, 0);
+                    float u = (float)x / (nx - 1);
+
+                    Vector3 curPt = bottom_left_corner + new Vector3(u * width, v * height, 0);
 
                     Ray ray = new Ray(origin, curPt);   // actually should be "new Ray(origin , curPt - origin)
 
