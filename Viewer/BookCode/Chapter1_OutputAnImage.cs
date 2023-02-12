@@ -3,7 +3,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Viewer.BookCode
 {
-    public static class Chapter1
+    public static class Chapter1_OutputAnImage
     {
         public static Image<Rgba32> GenerateImage()
         {

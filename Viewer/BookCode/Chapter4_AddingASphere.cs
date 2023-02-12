@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace Viewer.BookCode
 {
-    public static class Chapter4
+    public static class Chapter4_AddingASphere
     {
         public static Image<Rgba32> GenerateImage()
         {

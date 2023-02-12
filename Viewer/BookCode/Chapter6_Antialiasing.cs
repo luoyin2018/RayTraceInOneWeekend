@@ -5,21 +5,19 @@ using System.Numerics;
 
 namespace Viewer.BookCode
 {
-    public static class Chapter5_2
+    public static class Chapter6_Antialiasing
     {
         public static Image<Rgba32> GenerateImage()
         {
             int nx = 400;
             int ny = 200;
+
+            int ns = 40;  // 抗锯齿采样点数
+            Random rd = new Random();
+
             Image<Rgba32> image = new(nx, ny);
 
-            Vector3 origin = Vector3.Zero;
-
-            float width = 4;
-            float height = 2;
-            float dist = 1;    // 画面距相机的距离
-
-            Vector3 bottom_left_corner = new Vector3(-width / 2, -height / 2, -dist);
+            Camera camera = new Camera(4, 2, 1);
 
             IHitable world = new HitableList(
                 new[] { 
@@ -30,17 +28,20 @@ namespace Viewer.BookCode
             // 从下往上一行一行扫描
             for (int y = ny - 1; y >= 0; y--)
             {
-                float v = (float)(ny - 1 - y) / (ny - 1);   // !!!! 应该是除于ny
-
                 for (int x = 0; x < nx; x++)
                 {
-                    float u = (float)x / (nx - 1);
+                    Vector3 pxColor = Vector3.Zero;   // 采样混合来抗锯齿
+                    for(int s = 0; s<ns; s++)
+                    {
+                        float v = (float)(ny - 1 - y + rd.NextDouble()) / ny;
+                        float u = (float)(x + rd.NextDouble()) / nx;
 
-                    Vector3 curPt = bottom_left_corner + new Vector3(u * width, v * height, 0);
+                        Ray ray = camera.GetRay(u, v);
+                        pxColor += GetColor(ref ray, world);
+                    }
+                    pxColor = pxColor / ns;
 
-                    Ray ray = new Ray(origin, curPt);   // actually should be "new Ray(origin , curPt - origin)
-
-                    image[x, y] = new Rgba32(GetColor(ref ray, world));
+                    image[x, y] = new Rgba32(pxColor);
                 }
             }
 

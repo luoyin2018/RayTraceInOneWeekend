@@ -5,13 +5,13 @@ using System.Numerics;
 
 namespace Viewer.BookCode
 {
-    public static class Chapter7_1
+    public static class Chapter7_2_RefineEffect
     {
         private static Random _rd = new Random();
         public static Image<Rgba32> GenerateImage()
         {
-            int nx = 400;
-            int ny = 200;
+            int nx = 200;
+            int ny = 100;
 
             int ns = 100;  // 抗锯齿采样点数  + 漫反射光线计算
 
@@ -40,6 +40,12 @@ namespace Viewer.BookCode
                         pxColor += GetColor(ref ray, world);
                     }
                     pxColor = pxColor / ns;
+
+                    pxColor = new Vector3(
+                        (float)Math.Sqrt(pxColor.X),
+                        (float)Math.Sqrt(pxColor.Y),
+                        (float)Math.Sqrt(pxColor.Z)
+                        );
 
                     image[x, y] = new Rgba32(pxColor);
                 }

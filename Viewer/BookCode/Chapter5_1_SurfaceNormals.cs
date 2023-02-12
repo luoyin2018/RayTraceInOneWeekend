@@ -1,10 +1,11 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System;
 using System.Numerics;
 
 namespace Viewer.BookCode
 {
-    public static class Chapter3
+    public static class Chapter5_1_SurfaceNormals
     {
         public static Image<Rgba32> GenerateImage()
         {
@@ -41,11 +42,40 @@ namespace Viewer.BookCode
             return image;
         }
 
+        private static float HitSphere(Vector3 center, float radius, ref Ray ray)
+        {
+            Vector3 oc = ray.Origin - center;
+
+            float a = Vector3.Dot(ray.Direction, ray.Direction);
+            float b = 2.0f * Vector3.Dot(oc, ray.Direction);
+            float c = Vector3.Dot(oc, oc) - radius * radius;
+
+            float discriminant = b * b - 4 * a * c;
+
+            if(discriminant<0)
+            {
+                return -1.0f;
+            }
+            else
+            {
+                return (-b - (float)Math.Sqrt(discriminant)) / (2f * a);
+            }
+        }
+
         private static Vector3 GetColor(ref Ray ray)
         {
+            Vector3 sphereCenter = new Vector3(0, 0, -1);
+            float radius = 0.5f;
+            float t = HitSphere(sphereCenter, radius, ref ray);
+            if (t > 0)
+            {
+                Vector3 hitPoint = ray.PointOnRay(t);
+                Vector3 normal = Vector3.Normalize(hitPoint - sphereCenter);
+                return 0.5f * (normal + Vector3.One);
+            }
             var dir = ray.Direction;
-            float t = 0.5f * (dir.Y + 1.0f);
-            return (1.0f - t) * Vector3.One + t * new Vector3(0.5f, 0.7f, 1.0f);
+            float ratio = 0.5f * (dir.Y + 1.0f);
+            return (1.0f - ratio) * Vector3.One + ratio * new Vector3(0.5f, 0.7f, 1.0f);
         }
     }
 }
