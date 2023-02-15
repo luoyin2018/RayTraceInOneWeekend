@@ -4,4 +4,4 @@
 
 
 ## Final image
-![output_fov60_aperture0](https://user-images.githubusercontent.com/35357755/218922313-eaaec62f-0939-4ae2-8c02-996625ce6ab0.jpg)
+![output_ns200](https://user-images.githubusercontent.com/35357755/218926609-7b7475d4-0101-4be7-bb0a-9d5cc7229b28.jpg)
