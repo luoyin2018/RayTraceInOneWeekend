@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Viewer.BookCode
+namespace Viewer.Refine
 {
     public class Sphere : IHitable
     {

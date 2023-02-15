@@ -1,6 +1,7 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Viewer.BookCode;
+using Viewer.Refine;
 
 namespace Viewer
 {
@@ -8,7 +9,7 @@ namespace Viewer
     {
         public static Image<Rgba32> GenerateImage()
         {
-            return Chapter7_2_RefineEffect.GenerateImage();
+            return RandomScene_mrt.GenerateImage();
         }
     }
 }
