@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Numerics;
+﻿using System.Numerics;
 
-namespace Viewer.BookCode
+namespace RayTracingInOneWeekend.BookCode.Share
 {
-    public class Camera
+    public class Camera_Basic
     {
         public Vector3 Origin { get; } = Vector3.Zero;
 
@@ -16,7 +11,7 @@ namespace Viewer.BookCode
 
         private Vector3 _bottomLeftCorner;
 
-        public Camera(float screenWidth, float screenHeight, float screenDistance)
+        public Camera_Basic(float screenWidth, float screenHeight, float screenDistance)
         {
             _screenWidth = screenWidth;
             _screenHeight = screenHeight;

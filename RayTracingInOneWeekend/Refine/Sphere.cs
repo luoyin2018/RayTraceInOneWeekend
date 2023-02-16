@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Viewer.Refine
+namespace RayTracingInOneWeekend.Refine
 {
     public class Sphere : IHitable
     {
@@ -14,18 +9,12 @@ namespace Viewer.Refine
         public float Radius { get; }
         public IMaterial Material { get; }
 
-        public Sphere(Vector3 center, float radius)
+        public Sphere(Vector3 center, float radius, IMaterial mat)
         {
             Center = center;
             Radius = radius;
-        }
-        public Sphere(Vector3 center, float radius, IMaterial mat)
-            :this(center, radius)
-
-        {
             Material = mat;
         }
-
 
         public bool Hit(ref Ray ray, float tMin, float tMax, out HitRecord hitRecord)
         {

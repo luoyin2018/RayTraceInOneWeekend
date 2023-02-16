@@ -1,13 +1,13 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System;
 using System.Numerics;
+using RayTracingInOneWeekend.BookCode.Share;
 
-namespace Viewer.BookCode
+namespace RayTracingInOneWeekend.BookCode
 {
-    public static class Chapter5_2_MultipleObjects
+    public class Chapter05_2_MultipleObjects : IImageGenerator
     {
-        public static Image<Rgba32> GenerateImage()
+        public Image<Rgba32> GenerateImage()
         {
             int nx = 400;
             int ny = 200;
@@ -30,7 +30,7 @@ namespace Viewer.BookCode
             // 从下往上一行一行扫描
             for (int y = ny - 1; y >= 0; y--)
             {
-                float v = (float)(ny - 1 - y) / (ny - 1);   // !!!! 应该是除于ny
+                float v = (float)(ny - 1 - y) / (ny - 1);   
 
                 for (int x = 0; x < nx; x++)
                 {

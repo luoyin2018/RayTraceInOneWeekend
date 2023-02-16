@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Viewer.BookCode
+namespace RayTracingInOneWeekend.BookCode.Share
 {
     public class Sphere : IHitable
     {
@@ -14,15 +9,11 @@ namespace Viewer.BookCode
         public float Radius { get; }
         public IMaterial Material { get; }
 
-        public Sphere(Vector3 center, float radius)
+        public Sphere(Vector3 center, float radius) :this(center, radius, null) { }
+        public Sphere(Vector3 center, float radius, IMaterial mat)
         {
             Center = center;
             Radius = radius;
-        }
-        public Sphere(Vector3 center, float radius, IMaterial mat)
-            :this(center, radius)
-
-        {
             Material = mat;
         }
 

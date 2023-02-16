@@ -3,17 +3,18 @@ using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Numerics;
 using System.Collections.Generic;
+using RayTracingInOneWeekend.BookCode.Share;
 
-namespace Viewer.BookCode
+namespace RayTracingInOneWeekend.BookCode
 {
-    public static class Chapter12_RandomScene
+    public class Chapter12_RandomScene : IImageGenerator
     {
-        public static Image<Rgba32> GenerateImage()
+        public Image<Rgba32> GenerateImage()
         {
-            int nx = 100;
-            int ny = 50;
+            int nx = 200;
+            int ny = 100;
 
-            int ns = 50;  
+            int ns = 30;  
 
             Image<Rgba32> image = new(nx, ny);
 
@@ -23,7 +24,7 @@ namespace Viewer.BookCode
             float aperture = 0.02f;
             float fov = 90;
 
-            var camera = new Chapter11_DefocusBlur.CameraEx(
+            var camera = new Camera_DefocusBlur(
                 lookfrom,lookat,
                 new Vector3(0, 1, 0),
                 fov,
@@ -41,11 +42,11 @@ namespace Viewer.BookCode
                     Vector3 pxColor = Vector3.Zero;   // 采样混合来抗锯齿
                     for (int s = 0; s < ns; s++)
                     {
-                        float v = (float)(ny - 1 - y + Helper.Next()) / ny;
-                        float u = (float)(x + Helper.Next()) / nx;
+                        float v = (ny - 1 - y + Randomizer.NextFloat()) / ny;
+                        float u = (x + Randomizer.NextFloat()) / nx;
 
                         Ray ray = camera.GetRay(u, v);
-                        pxColor += Chapter11_DefocusBlur.GetColor(ref ray, world, 0);
+                        pxColor += Chapter08_Metal.GetColor(ref ray, world, 0);
                     }
                     pxColor = pxColor / ns;
 
@@ -66,15 +67,15 @@ namespace Viewer.BookCode
         {
             List<IHitable> hitableObjects = new()
             {
-                 new Sphere(new Vector3(0, -1000, 0), 1000, new Lambertian(new Vector3(0.5f,0.5f,0.5f)))
+                 new Sphere(new Vector3(0, -1000, 0), 1000, new Materila_Lambertian(new Vector3(0.5f,0.5f,0.5f)))
             };
 
             for (int a = -11; a < 11; a++)
             {
                 for (int b = -11; b < 11; b++)
                 {
-                    double chooseMat = Helper.Next();
-                    Vector3 center = new Vector3(a + 0.9f * Helper.NextFloat(), 0.2f, b + 0.9f * Helper.NextFloat());
+                    double chooseMat = Randomizer.Next();
+                    Vector3 center = new Vector3(a + 0.9f * Randomizer.NextFloat(), 0.2f, b + 0.9f * Randomizer.NextFloat());
                     if ((center - new Vector3(4, 0.2f, 0)).Length() > 0.9f)
                     {
                         if (chooseMat < 0.8)
@@ -83,7 +84,7 @@ namespace Viewer.BookCode
                                 new Sphere(
                                     center,
                                     0.2f,
-                                    new Lambertian(new Vector3(Helper.NextFloat() * Helper.NextFloat(), Helper.NextFloat() * Helper.NextFloat(), Helper.NextFloat() * Helper.NextFloat()))));
+                                    new Materila_Lambertian(new Vector3(Randomizer.NextFloat() * Randomizer.NextFloat(), Randomizer.NextFloat() * Randomizer.NextFloat(), Randomizer.NextFloat() * Randomizer.NextFloat()))));
                         }
                         else if (chooseMat < 0.95)
                         {
@@ -91,7 +92,7 @@ namespace Viewer.BookCode
                                 new Sphere(
                                     center,
                                     0.2f,
-                                    new Metal(new Vector3(0.5f * (1 + Helper.NextFloat()), 0.5f * (1 + Helper.NextFloat()), 0.5f * (1 + Helper.NextFloat())), 0.5f * Helper.NextFloat())));
+                                    new Material_Metal((Vector3.One + Randomizer.RandomVector3()) / 2, 0.5f * Randomizer.NextFloat())));
                         }
                         else
                         {
@@ -99,16 +100,15 @@ namespace Viewer.BookCode
                                 new Sphere(
                                     center,
                                     0.2f,
-                                    new Dielectric(1.5f)));
-
+                                    new Material_Dielectric(1.5f)));
                         }
                     } 
                 }
             }
 
-            hitableObjects.Add(new Sphere(new Vector3(0, 1, 0), 1, new Dielectric(1.5f)));
-            hitableObjects.Add(new Sphere(new Vector3(-4, 1, 0), 1, new Lambertian(new Vector3(0.4f,0.2f,0.1f))));
-            hitableObjects.Add(new Sphere(new Vector3(4, 1, 0), 1, new Metal(new Vector3(0.7f, 0.6f, 0.5f), 0)));
+            hitableObjects.Add(new Sphere(new Vector3(0, 1, 0), 1, new Material_Dielectric(1.5f)));
+            hitableObjects.Add(new Sphere(new Vector3(-4, 1, 0), 1, new Materila_Lambertian(new Vector3(0.4f,0.2f,0.1f))));
+            hitableObjects.Add(new Sphere(new Vector3(4, 1, 0), 1, new Material_Metal(new Vector3(0.7f, 0.6f, 0.5f), 0)));
 
             return new HitableList(hitableObjects);
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Viewer.Refine
+namespace RayTracingInOneWeekend.Refine
 {
     public class Dielectric : IMaterial
     {
@@ -14,7 +14,7 @@ namespace Viewer.Refine
         public bool Scatter(ref Ray ray, HitRecord hitRecord, Randomizer rd, out Vector3 attenuation, out Ray scattered)
         {
             Vector3 outwardNormal;
-            Vector3 reflected = Helper.Reflect(ray.Direction, hitRecord.normal);
+            Vector3 reflected = MathHelper.Reflect(ray.Direction, hitRecord.normal);
             float ni_over_nt;
             attenuation = Vector3.One;
 

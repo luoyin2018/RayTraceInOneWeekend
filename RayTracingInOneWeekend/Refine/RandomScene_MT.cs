@@ -5,34 +5,31 @@ using System.Numerics;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Viewer.Refine
+namespace RayTracingInOneWeekend.Refine
 {
-    public static class RandomScene_mrt
+    public class RandomScene_MT : IImageGenerator
     {
-        public static Image<Rgba32> GenerateImage()
+        public Image<Rgba32> GenerateImage()
         {
-            int nx = 1200;
-            int ny = 900;
+            int nx = 960;
+            int ny = 720;
 
-            int ns = 200;  
+            int ns = 200;
 
             Image<Rgba32> image = new(nx, ny);
 
-            Vector3 lookfrom = new Vector3(7, 1, 2);
-            Vector3 lookat = new Vector3(0, 0, -1);
+            Vector3 lookfrom = new Vector3(12, 2, 2.5f);
+            Vector3 lookat = new Vector3(0, 0, 0);
             float dist_to_focus = (lookfrom - lookat).Length();
             float aperture = 0f;
-            float fov = 60;
-
-
+            float fov = 30;
 
             IHitable world = GenerateRandomScene();
 
             var pixels = from y in Enumerable.Range(0, ny)
-                        from x in Enumerable.Range(0, nx)
-                        select (x, y);
+                         from x in Enumerable.Range(0, nx)
+                         select (x, y);
 
-            //var pic =  pixels.AsParallel().Select(pix =>
             pixels.AsParallel().ForAll(pix =>
             {
                 Randomizer rd = new Randomizer();
@@ -53,7 +50,7 @@ namespace Viewer.Refine
                     float u = (float)(x + rd.Next()) / nx;
 
                     Ray ray = camera.GetRay(u, v);
-                    pxColor += GetColor(ref ray, world, rd,  0);
+                    pxColor += GetColor(ref ray, world, rd, 0);
                 }
                 pxColor = pxColor / ns;
 
@@ -62,14 +59,8 @@ namespace Viewer.Refine
                     (float)Math.Sqrt(pxColor.Y),
                     (float)Math.Sqrt(pxColor.Z)
                     );
-                //return (x, y, pxColor);
                 image[x, y] = new Rgba32(pxColor);
             });
-
-            //foreach(var (x,y,color) in pic)
-            //{
-            //    image[x, y] = new Rgba32(color);
-            //}
 
             return image;
         }
@@ -88,11 +79,11 @@ namespace Viewer.Refine
                 for (int b = -11; b < 11; b++)
                 {
                     double chooseMat = rd.Next();
-                    Vector3 center = new Vector3(a + 0.9f * rd.NextFloat(), 0.2f, b + 0.9f * rd.NextFloat());
+                    Vector3 center = new Vector3(a + 0.8f * rd.NextFloat(), 0.2f, b + 0.8f * rd.NextFloat());
 
-                    if ((center - new Vector3(4, 0.2f, 0)).Length() < 0.9f
-                        || (center - new Vector3(-4, 0.2f, 0)).Length() < 0.9f
-                        || (center - new Vector3(0, 0.2f, 0)).Length() < 0.9f)
+                    if ((center - new Vector3(4, 0.2f, 0)).Length() < 1.1f
+                        || (center - new Vector3(-4, 0.2f, 0)).Length() < 1.1f
+                        || (center - new Vector3(0, 0.2f, 0)).Length() < 1.1f)
                     {
                         continue;
                     }
@@ -111,16 +102,11 @@ namespace Viewer.Refine
                             new Sphere(
                                 center,
                                 0.2f,
-                                new Metal(new Vector3(0.5f * (1 + rd.NextFloat()), 0.5f * (1 + rd.NextFloat()), 0.5f * (1 + rd.NextFloat())), 0.5f * rd.NextFloat())));
+                                new Metal((Vector3.One + rd.RandomVector3()) / 2, 0.5f * rd.NextFloat())));
                     }
                     else
                     {
-                        hitableObjects.Add(
-                            new Sphere(
-                                center,
-                                0.2f,
-                                new Dielectric(1.5f)));
-
+                        hitableObjects.Add( new Sphere( center, 0.2f, new Dielectric(1.5f)));
                     }
                 }
             }
@@ -132,7 +118,7 @@ namespace Viewer.Refine
             return new HitableList(hitableObjects);
         }
 
-        public static Vector3 GetColor(ref Ray ray, IHitable hitObject,Randomizer rd, int depth)
+        private static Vector3 GetColor(ref Ray ray, IHitable hitObject,Randomizer rd, int depth)
         {
             if (hitObject.Hit(ref ray, 0.001f, float.MaxValue, out HitRecord hitRecord))
             {

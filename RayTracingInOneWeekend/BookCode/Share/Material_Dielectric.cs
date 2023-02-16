@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Viewer.BookCode
+namespace RayTracingInOneWeekend.BookCode.Share
 {
-    public class Dielectric : IMaterial
+    public class Material_Dielectric : IMaterial
     {
         private readonly float refractIndex;
-        public Dielectric(float ri)
+        public Material_Dielectric(float ri)
         {
             refractIndex = ri;
         }
@@ -14,7 +14,7 @@ namespace Viewer.BookCode
         public bool Scatter(ref Ray ray, HitRecord hitRecord, out Vector3 attenuation, out Ray scattered)
         {
             Vector3 outwardNormal;
-            Vector3 reflected = Helper.Reflect(ray.Direction, hitRecord.normal);
+            Vector3 reflected = MathHelper.Reflect(ray.Direction, hitRecord.normal);
             float ni_over_nt;
             attenuation = Vector3.One;
 
@@ -52,7 +52,7 @@ namespace Viewer.BookCode
                 reflect_prob = 1;
             }
 
-            if(Helper.Next() < reflect_prob)
+            if(Randomizer.Next() < reflect_prob)
             {
                 scattered = new Ray(hitRecord.hitpoint, reflected);
             }
@@ -84,7 +84,6 @@ namespace Viewer.BookCode
                 refacted = Vector3.Zero;
                 return false;
             }
-
         }
     }
 }

@@ -1,15 +1,14 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Numerics;
 
-namespace Viewer.BookCode
+namespace RayTracingInOneWeekend.BookCode
 {
-    public static class Chapter1_OutputAnImage
+    public class Chapter01_OutputAnImage : IImageGenerator
     {
-        public static Image<Rgba32> GenerateImage()
+        public Image<Rgba32> GenerateImage()
         {
-            int nx = 200;
-            int ny = 100;
+            int nx = 400;
+            int ny = 200;
 
             Image<Rgba32> image = new(nx, ny);
             //for (int y = ny - 1; y >= 0; y--)

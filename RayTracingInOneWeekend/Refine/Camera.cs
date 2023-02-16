@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Numerics;
 
-namespace Viewer.Refine
+namespace RayTracingInOneWeekend.Refine
 {
     public class Camera
     {
@@ -51,7 +47,7 @@ namespace Viewer.Refine
             Vector3 offset = uDir * rd.X + vDir * rd.Y;
 
             Vector3 screenPoint = _bottomLeftCorner + (u * _screenWidth * uDir) + (v * _screenHeight * vDir);
-            return new Ray(Origin + offset, screenPoint - Origin - offset); // actually should be "new Ray(origin , curPt - origin)
+            return new Ray(Origin + offset, screenPoint - Origin - offset);
         }
     }
 }

@@ -5,10 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Viewer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1000" Width="1300">
+        Title="RayTracingInOneWeekend BookCode" Height="960" Width="1200">
     <Grid>
-        <Image x:Name="image" 
-               Stretch="None"
-               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Background="AliceBlue" TextBlock.FontSize="18">
+            <Grid Margin="64,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Select image: " Margin="8,0" VerticalAlignment="Center"/>
+                <ComboBox Grid.Column="1" 
+               TextBlock.TextAlignment="Center"
+               ItemsSource="{Binding ImageCollection}" SelectedItem="{Binding SelectedImage}" DisplayMemberPath="Name"/>
+            </Grid>
+        </Grid>
+        <Image Grid.Row="1" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"
+               Source="{Binding SelectedImage.Image}"/>
     </Grid>
 </Window>

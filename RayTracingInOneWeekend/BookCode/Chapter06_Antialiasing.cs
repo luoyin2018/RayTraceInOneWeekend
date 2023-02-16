@@ -2,22 +2,22 @@
 using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Numerics;
+using RayTracingInOneWeekend.BookCode.Share;
 
-namespace Viewer.BookCode
+namespace RayTracingInOneWeekend.BookCode
 {
-    public static class Chapter7_1_DiffuseMaterials
+    public class Chapter06_Antialiasing : IImageGenerator
     {
-        private static Random _rd = new Random();
-        public static Image<Rgba32> GenerateImage()
+        public Image<Rgba32> GenerateImage()
         {
             int nx = 400;
             int ny = 200;
 
-            int ns = 100;  // 抗锯齿采样点数  + 漫反射光线计算
+            int ns = 40;  // 抗锯齿采样点数
 
             Image<Rgba32> image = new(nx, ny);
 
-            Camera camera = new Camera(4, 2, 1);
+            Camera_Basic camera = new Camera_Basic(4, 2, 1);
 
             IHitable world = new HitableList(
                 new[] { 
@@ -33,8 +33,8 @@ namespace Viewer.BookCode
                     Vector3 pxColor = Vector3.Zero;   // 采样混合来抗锯齿
                     for(int s = 0; s<ns; s++)
                     {
-                        float v = (float)(ny - 1 - y + _rd.NextDouble()) / ny;
-                        float u = (float)(x + _rd.NextDouble()) / nx;
+                        float v = (ny - 1 - y + Randomizer.NextFloat()) / ny;
+                        float u = (x + Randomizer.NextFloat()) / nx;
 
                         Ray ray = camera.GetRay(u, v);
                         pxColor += GetColor(ref ray, world);
@@ -48,24 +48,11 @@ namespace Viewer.BookCode
             return image;
         }
 
-        private static Vector3 RandomInUnitSphere()
-        {
-            Vector3 p;
-            do
-            {
-                p = 2.0f * new Vector3((float)_rd.NextDouble(), (float)_rd.NextDouble(), (float)_rd.NextDouble())
-                    - Vector3.One;
-            } while (p.LengthSquared() >= 1);
-            return p;
-        }
-
         private static Vector3 GetColor(ref Ray ray, IHitable hitObject)
         {
             if (hitObject.Hit(ref ray, 0, float.MaxValue, out HitRecord hitRecord))
             {
-                Vector3 diffuseDir = hitRecord.normal + RandomInUnitSphere();
-                var diffuseRay = new Ray(hitRecord.hitpoint, diffuseDir);
-                return 0.5f * GetColor(ref diffuseRay, hitObject);    // 递归 每次光线的反射吸收50%
+                return 0.5f * (hitRecord.normal + Vector3.One);
             }
             var dir = ray.Direction;
             float ratio = 0.5f * (dir.Y + 1.0f);

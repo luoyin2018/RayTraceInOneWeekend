@@ -2,12 +2,13 @@
 using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Numerics;
+using RayTracingInOneWeekend.BookCode.Share;
 
-namespace Viewer.BookCode
+namespace RayTracingInOneWeekend.BookCode
 {
-    public static class Chapter5_1_SurfaceNormals
+    public class Chapter05_1_SurfaceNormals : IImageGenerator
     {
-        public static Image<Rgba32> GenerateImage()
+        public Image<Rgba32> GenerateImage()
         {
             int nx = 400;
             int ny = 200;

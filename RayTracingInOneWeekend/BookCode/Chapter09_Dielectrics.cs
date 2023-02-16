@@ -6,23 +6,18 @@ using RayTracingInOneWeekend.BookCode.Share;
 
 namespace RayTracingInOneWeekend.BookCode
 {
-    public class Chapter10_PositionalCamera : IImageGenerator
+    public class Chapter09_Dielectrics : IImageGenerator
     {
         public Image<Rgba32> GenerateImage()
         {
             int nx = 400;
             int ny = 200;
 
-            int ns = 100;  // 抗锯齿采样点数  + 光线混合计算
+            int ns = 100;  // 抗锯齿采样点数  + 漫反射光线计算
 
             Image<Rgba32> image = new(nx, ny);
 
-            Camera_Positional camera = new Camera_Positional(
-                new Vector3(-2, 2, 1),
-                new Vector3(0, 0, -1),
-                new Vector3(0, 1, 0),
-                90,
-                (float)nx / ny);
+            Camera_Basic camera = new Camera_Basic(4, 2, 1);
 
             IHitable world = new HitableList(
                 new[] {

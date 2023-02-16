@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Windows;
-using System.Windows.Media.Imaging;
+﻿using System.Windows;
 
 namespace Viewer
 {
@@ -13,13 +10,9 @@ namespace Viewer
         public MainWindow()
         {
             InitializeComponent();
-
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(Path.Combine(Environment.CurrentDirectory, App.PicName));
-            bitmap.EndInit();
-
-            image.Source = bitmap;
+            var viewModel = new MainWindowViewModel();
+            this.DataContext = viewModel;
+            viewModel.GenerateAllPicture();
         }
     }
 }

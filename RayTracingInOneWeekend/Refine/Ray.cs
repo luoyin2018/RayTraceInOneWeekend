@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Viewer
+namespace RayTracingInOneWeekend.Refine
 {
     public struct Ray
     {

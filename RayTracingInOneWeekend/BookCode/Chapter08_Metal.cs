@@ -2,28 +2,29 @@
 using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Numerics;
+using RayTracingInOneWeekend.BookCode.Share;
 
-namespace Viewer.BookCode
+namespace RayTracingInOneWeekend.BookCode
 {
-    public static class Chapter8_Metal
+    public class Chapter08_Metal : IImageGenerator
     {
-        public static Image<Rgba32> GenerateImage()
+        public Image<Rgba32> GenerateImage()
         {
-            int nx = 200;
-            int ny = 100;
+            int nx = 400;
+            int ny = 200;
 
             int ns = 100;  // 抗锯齿采样点数  + 漫反射光线计算
 
             Image<Rgba32> image = new(nx, ny);
 
-            Camera camera = new Camera(4, 2, 1);
+            Camera_Basic camera = new Camera_Basic(4, 2, 1);
 
             IHitable world = new HitableList(
                 new[] {
-                    new Sphere(new Vector3(0, 0, -1), 0.5f, new Lambertian(new Vector3(0.8f,0.3f,0.3f))),
-                    new Sphere(new Vector3(0, -100.5f, -1), 100, new Lambertian(new Vector3(0.8f,0.8f,0))),
-                    new Sphere(new Vector3(1,  0, -1), 0.5f, new Metal(new Vector3(0.8f,0.6f,0.2f), 0.3f)),
-                    new Sphere(new Vector3(-1, 0, -1), 0.5f, new Metal(new Vector3(0.8f, 0.8f, 0.8f),1.0f))
+                    new Sphere(new Vector3( 0,       0, -1), 0.5f, new Materila_Lambertian(new Vector3(0.8f, 0.3f, 0.3f))),
+                    new Sphere(new Vector3( 0, -100.5f, -1),  100, new Materila_Lambertian(new Vector3(0.8f, 0.8f, 0))),
+                    new Sphere(new Vector3( 1,       0, -1), 0.5f, new Material_Metal(new Vector3(0.8f, 0.6f, 0.2f), 0.3f)),
+                    new Sphere(new Vector3(-1,       0, -1), 0.5f, new Material_Metal(new Vector3(0.8f, 0.8f, 0.8f), 1.0f))
                 });
 
             // 从下往上一行一行扫描
@@ -34,8 +35,8 @@ namespace Viewer.BookCode
                     Vector3 pxColor = Vector3.Zero;   // 采样混合来抗锯齿
                     for(int s = 0; s<ns; s++)
                     {
-                        float v = (float)(ny - 1 - y + Helper.Next()) / ny;
-                        float u = (float)(x + Helper.Next()) / nx;
+                        float v = (ny - 1 - y + Randomizer.NextFloat()) / ny;
+                        float u = (x + Randomizer.NextFloat()) / nx;
 
                         Ray ray = camera.GetRay(u, v);
                         pxColor += GetColor(ref ray, world, 0);
@@ -55,7 +56,7 @@ namespace Viewer.BookCode
             return image;
         }
 
-        private static Vector3 GetColor(ref Ray ray, IHitable hitObject, int depth)
+        public static Vector3 GetColor(ref Ray ray, IHitable hitObject, int depth)
         {
             if (hitObject.Hit(ref ray, 0.001f, float.MaxValue, out HitRecord hitRecord))
             {

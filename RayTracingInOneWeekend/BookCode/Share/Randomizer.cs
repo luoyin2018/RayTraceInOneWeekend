@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Numerics;
 
-namespace RayTracingInOneWeekend.Refine
+namespace RayTracingInOneWeekend.BookCode.Share
 {
-    public class Randomizer
+    public static class Randomizer
     {
-        private Random _rd = new Random();
-        public Vector3 RandomInUnitSphere()
+        private static Random _rd = new Random();
+        public static Vector3 RandomInUnitSphere()
         {
             Vector3 p;
             do
             {
-                p = 2.0f * new Vector3((float)_rd.NextDouble(), (float)_rd.NextDouble(), (float)_rd.NextDouble())
-                    - Vector3.One;
+                p = 2.0f * RandomVector3() - Vector3.One;
             } while (p.LengthSquared() >= 1);
             return p;
         }
-        public Vector3 RandomInUnitDisk()
+        public static Vector3 RandomInUnitDisk()
         {
             Vector3 p;
             do
@@ -27,16 +26,16 @@ namespace RayTracingInOneWeekend.Refine
             return p;
         }
 
-        public Vector3 RandomVector3()
+        public static Vector3 RandomVector3()
         {
             return new Vector3((float)_rd.NextDouble(), (float)_rd.NextDouble(), (float)_rd.NextDouble());
         }
 
-        public double Next()
+        public static double Next()
         {
             return _rd.NextDouble();
         }
-        public float NextFloat()
+        public static float NextFloat()
         {
             return (float)_rd.NextDouble();
         }
