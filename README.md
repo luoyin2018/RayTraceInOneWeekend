@@ -4,4 +4,5 @@
 
 
 ## Final image
-![output_ns200](https://user-images.githubusercontent.com/35357755/218926609-7b7475d4-0101-4be7-bb0a-9d5cc7229b28.jpg)
+
+![RandomScene_MT](https://user-images.githubusercontent.com/35357755/219311690-c4ffd643-33f7-42ad-a764-82d3b9fce0b6.jpg)
