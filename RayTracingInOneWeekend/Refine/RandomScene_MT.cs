@@ -24,6 +24,14 @@ namespace RayTracingInOneWeekend.Refine
             float aperture = 0f;
             float fov = 30;
 
+            var camera = new Camera(
+              lookfrom, lookat,
+              new Vector3(0, 1, 0),
+              fov,
+              (float)nx / ny,
+              aperture,
+              dist_to_focus);
+
             IHitable world = GenerateRandomScene();
 
             var pixels = from y in Enumerable.Range(0, ny)
@@ -33,14 +41,6 @@ namespace RayTracingInOneWeekend.Refine
             pixels.AsParallel().ForAll(pix =>
             {
                 Randomizer rd = new Randomizer();
-                var camera = new Camera(
-                  lookfrom, lookat,
-                  new Vector3(0, 1, 0),
-                  fov,
-                  (float)nx / ny,
-                  aperture,
-                  dist_to_focus,
-                  rd);
 
                 var (x, y) = pix;
                 Vector3 pxColor = Vector3.Zero;   // 采样混合来抗锯齿
@@ -49,7 +49,7 @@ namespace RayTracingInOneWeekend.Refine
                     float v = (float)(ny - 1 - y + rd.Next()) / ny;
                     float u = (float)(x + rd.Next()) / nx;
 
-                    Ray ray = camera.GetRay(u, v);
+                    Ray ray = camera.GetRay(u, v, rd);
                     pxColor += GetColor(ref ray, world, rd, 0);
                 }
                 pxColor = pxColor / ns;

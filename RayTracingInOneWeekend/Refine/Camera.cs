@@ -20,8 +20,7 @@ namespace RayTracingInOneWeekend.Refine
 
         private readonly float lensRadius;
 
-        private readonly Randomizer _rd;
-        public Camera(Vector3 lookfrom, Vector3 lookat, Vector3 up, float vfov, float aspect, float aperture, float focusDist, Randomizer rd)
+        public Camera(Vector3 lookfrom, Vector3 lookat, Vector3 up, float vfov, float aspect, float aperture, float focusDist)
         {
             lensRadius = aperture / 2;
 
@@ -38,12 +37,10 @@ namespace RayTracingInOneWeekend.Refine
             Origin = lookfrom;
 
             _bottomLeftCorner = Origin - wDir * focusDist - _screenHeight / 2 * vDir - _screenWidth / 2 * uDir;
-
-            _rd = rd;
         }
-        public Ray GetRay(float u, float v)
+        public Ray GetRay(float u, float v, Randomizer randomGenerator)
         {
-            Vector3 rd = lensRadius * _rd.RandomInUnitDisk();
+            Vector3 rd = lensRadius * randomGenerator.RandomInUnitDisk();
             Vector3 offset = uDir * rd.X + vDir * rd.Y;
 
             Vector3 screenPoint = _bottomLeftCorner + (u * _screenWidth * uDir) + (v * _screenHeight * vDir);
